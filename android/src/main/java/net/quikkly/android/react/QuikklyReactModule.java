@@ -56,9 +56,9 @@ public class QuikklyReactModule extends ReactContextBaseJavaModule implements Ac
         super(reactContext);
 
         reactContext.addActivityEventListener(this);
-        
+
         if(!Quikkly.isConfigured()) {
-        	Quikkly.configureInstance(reactContext, 2, 30);
+        	Quikkly.configureInstance(reactContext, "blueprint_0077.json", 2, 30);
         }
     }
 
@@ -66,16 +66,16 @@ public class QuikklyReactModule extends ReactContextBaseJavaModule implements Ac
     public String getName() {
         return NAME;
     }
-    
+
     @Override
     public Map<String, Object> getConstants() {
         Map<String, Object> constants = new HashMap<>();
-        
+
         constants.put(KEY_VERSION, Quikkly.versionString());
-        
+
         return constants;
     }
-    
+
     @ReactMethod
     public void createImage(ReadableMap options, Promise promise) {
         String value = (options.getType(KEY_VALUE) == ReadableType.Number) ?
@@ -86,7 +86,7 @@ public class QuikklyReactModule extends ReactContextBaseJavaModule implements Ac
         if(value == null) {
             throw new IllegalArgumentException("'value' must be a number");
         }
-        
+
         if(template == null) {
             template = TEMPLATE_DEFAULT;
         }
@@ -138,7 +138,7 @@ public class QuikklyReactModule extends ReactContextBaseJavaModule implements Ac
         } catch(NoSuchKeyException e) {
             // Do nothing
         }
-        
+
         try {
             promise.resolve(Quikkly.getInstance().generateSvg(template, new BigInteger(value), skinBuilder.build()));
         } catch(Exception e) {
