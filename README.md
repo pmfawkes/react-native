@@ -99,7 +99,7 @@ protected List<ReactPackage> getPackages() {
 ## Usage
 
 ```javascript
-import { Quikkly } from "react-native-quikkly"
+import { Quikkly, QuikklyView } from "react-native-quikkly"
 
 // Print SDK version
 console.log(Quikkly.VERSION)
@@ -120,10 +120,26 @@ Quikkly.createImage({
 	console.log(result)
 })
 
-// Show scan UI
+// A) Show scan UI
 Quikkly.scanForResult({ } /* options */).then((result) => {
     console.log(result.value)
 }).catch((err) => {
     console.log(err)
 })
+
+// B) Alternatively show scan overlay
+export default class App extends Component<Props> {
+  onScanCode(result) {
+	console.log(result.value)
+  }
+  
+  render() {
+    return (
+      <View style={styles.container}>
+        <QuikklyView style={styles.quikkly} onScanCode={this.onScanCode} />
+        ...
+      </View>
+    );
+  }
+}
 ```

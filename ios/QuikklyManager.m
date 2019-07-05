@@ -37,6 +37,10 @@ RCT_EXPORT_MODULE();
     return NO;
 }
 
++ (void)configure {
+    QuikklyInitialize();
+}
+
 - (NSDictionary *)constantsToExport {
     return @{ @"VERSION": [NSString stringWithUTF8String:QC_VERSION_STR] };
 }
