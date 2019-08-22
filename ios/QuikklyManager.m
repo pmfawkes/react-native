@@ -19,7 +19,6 @@ static void QuikklyInitialize() {
 
     dispatch_once(&onceToken, ^{
         QKQuikkly.apiKey = @"unused";
-        QKQuikkly.blueprintFilename = @"blueprint_0077.json";
     });
 }
 
