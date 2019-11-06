@@ -30,7 +30,7 @@ android {
         targetSdkVersion rootProject.hasProperty("targetSdkVersion") ? rootProject.targetSdkVersion : project.property("sdk_version")
         versionCode 1
         versionName "$quikklyLibVersion"
-        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
     buildTypes {
         release {
@@ -53,12 +53,12 @@ dependencies {
     implementation fileTree(dir: "libs", include: ["*.jar"])
     implementation "net.quikkly.core:quikklycore-lib:$quikklyLibVersion"
     implementation "net.quikkly.android:quikkly-lib:$quikklyLibVersion@aar"
-    implementation "com.android.support:appcompat-v7:$supportLibVersion"
-    implementation "com.android.support:design:$supportLibVersion"
-    implementation "com.android.support:support-v13:$supportLibVersion"
-    implementation "com.android.support:support-vector-drawable:$supportLibVersion"
+    implementation 'androidx.appcompat:appcompat:1.0.0'
+    implementation 'com.google.android.material:material:1.0.0'
+    implementation 'androidx.legacy:legacy-support-v13:1.0.0'
+    implementation 'androidx.vectordrawable:vectordrawable:1.0.0'
     compileOnly "com.facebook.react:react-native:+"
     testImplementation "junit:junit:$junit_version"
-    androidTestImplementation "com.android.support.test:runner:$test_runner_version"
-    androidTestImplementation "com.android.support.test.espresso:espresso-core:$test_espresso_version"
+    androidTestImplementation 'androidx.test.ext:junit:1.1.1'
+    androidTestImplementation 'androidx.test.espresso:espresso-core:3.1.0'
 }
