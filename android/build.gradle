@@ -53,10 +53,10 @@ dependencies {
     implementation fileTree(dir: "libs", include: ["*.jar"])
     implementation "net.quikkly.core:quikklycore-lib:$quikklyLibVersion"
     implementation "net.quikkly.android:quikkly-lib:$quikklyLibVersion@aar"
-    implementation 'androidx.appcompat:appcompat:1.0.0'
-    implementation 'com.google.android.material:material:1.0.0'
-    implementation 'androidx.legacy:legacy-support-v13:1.0.0'
-    implementation 'androidx.vectordrawable:vectordrawable:1.0.0'
+    implementation 'androidx.appcompat:appcompat:1.0.2'
+    implementation 'com.google.android.material:material:1.0.0-alpha1'
+    implementation 'androidx.legacy:legacy-support-v13:1.0.0-alpha1'
+    implementation 'androidx.vectordrawable:vectordrawable:1.0.0-alpha1'
     compileOnly "com.facebook.react:react-native:+"
     testImplementation "junit:junit:$junit_version"
     androidTestImplementation 'androidx.test.ext:junit:1.1.1'
