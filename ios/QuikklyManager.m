@@ -17,9 +17,11 @@ NSString *QuikklyManagerErrorDomain = @"QuikklyError";
 static void QuikklyInitialize() {
     static dispatch_once_t onceToken;
 
+    #if !(TARGET_IPHONE_SIMULATOR)
     dispatch_once(&onceToken, ^{
         QKQuikkly.apiKey = @"unused";
     });
+    #endif
 }
 
 static NSString *QuikklyGetStringOption(NSDictionary *options, NSString *key) {
@@ -50,7 +52,9 @@ RCT_EXPORT_METHOD(createImage:(NSDictionary *)options
     NSObject *value = [options objectForKey:QUIKKLY_KEY_VALUE];
     NSObject *template = [options objectForKey:QUIKKLY_KEY_TEMPLATE];
     NSDictionary *skinOptions = [options objectForKey:QUIKKLY_KEY_SKIN];
+    #if !(TARGET_IPHONE_SIMULATOR)
     QKScannableSkin *skin = [[QKScannableSkin alloc] init];
+    #endif
     NSString *result;
 
     QuikklyInitialize();
@@ -73,6 +77,8 @@ RCT_EXPORT_METHOD(createImage:(NSDictionary *)options
         RCTLogError(@"'%@' must be an object", QUIKKLY_KEY_SKIN);
         skinOptions = nil;
     }
+
+    #if !(TARGET_IPHONE_SIMULATOR)
 
     if(skinOptions) {
         NSString *parameter = QuikklyGetStringOption(skinOptions, QUIKKLY_KEY_BACKGROUND_COLOR);
@@ -115,6 +121,7 @@ RCT_EXPORT_METHOD(createImage:(NSDictionary *)options
     result = [[QKScannable alloc] initWithValue:((NSNumber *)value).unsignedLongLongValue
                                        template:(NSString *)template
                                            skin:skin].svgString;
+    #endif
 
     if(result) {
         resolve(result);
@@ -130,6 +137,7 @@ RCT_EXPORT_METHOD(scanForResult:(NSDictionary *)options
                   rejecter:(RCTPromiseRejectBlock)reject) {
     QuikklyInitialize();
 
+    #if !(TARGET_IPHONE_SIMULATOR)
     dispatch_async(dispatch_get_main_queue(), ^ {
         UIViewController *rootController = [UIApplication sharedApplication].delegate.window.rootViewController;
         QuikklyScanViewController *scanController;
@@ -159,6 +167,7 @@ RCT_EXPORT_METHOD(scanForResult:(NSDictionary *)options
 
         [rootController presentViewController:scanController animated:animated completion:nil];
     });
+    #endif
 }
 
 @end

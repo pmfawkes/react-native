@@ -1,6 +1,7 @@
 #import "QuikklyManager.h"
 #import "QuikklyScanViewManager.h"
 
+#if !(TARGET_IPHONE_SIMULATOR)
 @interface QuikklyScanView : UIView <QKScanViewDelegate>
 {
     @private
@@ -58,6 +59,7 @@
 }
 
 @end
+#endif
 
 @implementation QuikklyScanViewManager
 
@@ -69,8 +71,10 @@ RCT_EXPORT_MODULE();
 
 RCT_EXPORT_VIEW_PROPERTY(onScanCode, RCTBubblingEventBlock)
 
+#if !(TARGET_IPHONE_SIMULATOR)
 - (UIView *)view {
     return [[QuikklyScanView alloc] initWithFrame:CGRectZero];
 }
 
+#endif
 @end

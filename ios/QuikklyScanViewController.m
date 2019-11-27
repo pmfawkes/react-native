@@ -24,7 +24,9 @@
             
             m_reject = nil;
             
+            #if !(TARGET_IPHONE_SIMULATOR)
             [result setObject:[NSNumber numberWithUnsignedLongLong:scannable.value].stringValue forKey:@"value"];
+            #endif
             m_resolve(result);
             m_resolve = nil;
             
