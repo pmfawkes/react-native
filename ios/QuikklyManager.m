@@ -16,15 +16,17 @@ NSString *QuikklyManagerErrorDomain = @"QuikklyError";
 
 static void QuikklyInitialize() {
     static dispatch_once_t onceToken;
-    
+
+    #if !(TARGET_IPHONE_SIMULATOR)
     dispatch_once(&onceToken, ^{
         QKQuikkly.apiKey = @"unused";
     });
+    #endif
 }
 
 static NSString *QuikklyGetStringOption(NSDictionary *options, NSString *key) {
     NSObject *value = [options objectForKey:key];
-    
+
     return ([value isKindOfClass:[NSString class]]) ? (NSString *)value : nil;
 }
 
@@ -50,72 +52,77 @@ RCT_EXPORT_METHOD(createImage:(NSDictionary *)options
     NSObject *value = [options objectForKey:QUIKKLY_KEY_VALUE];
     NSObject *template = [options objectForKey:QUIKKLY_KEY_TEMPLATE];
     NSDictionary *skinOptions = [options objectForKey:QUIKKLY_KEY_SKIN];
+    #if !(TARGET_IPHONE_SIMULATOR)
     QKScannableSkin *skin = [[QKScannableSkin alloc] init];
+    #endif
     NSString *result;
-    
+
     QuikklyInitialize();
-    
+
     if([value isKindOfClass:[NSString class]]) {
         value = [NSNumber numberWithLongLong:((NSString *)value).longLongValue];
     }
-    
+
     if(![value isKindOfClass:[NSNumber class]]) {
         RCTLogError(@"'%@' must be a number %@", QUIKKLY_KEY_VALUE, value.class);
         value = nil;
     }
-    
+
     if(template && ![template isKindOfClass:[NSString class]]) {
         RCTLogError(@"'%@' must be a string", QUIKKLY_KEY_TEMPLATE);
         template = nil;
     }
-    
+
     if(skinOptions && ![skinOptions isKindOfClass:[NSDictionary class]]) {
         RCTLogError(@"'%@' must be an object", QUIKKLY_KEY_SKIN);
         skinOptions = nil;
     }
-    
+
+    #if !(TARGET_IPHONE_SIMULATOR)
+
     if(skinOptions) {
         NSString *parameter = QuikklyGetStringOption(skinOptions, QUIKKLY_KEY_BACKGROUND_COLOR);
-        
+
         if(parameter) {
             skin.backgroundColor = parameter;
         }
-        
+
         parameter = QuikklyGetStringOption(skinOptions, QUIKKLY_KEY_BORDER_COLOR);
-        
+
         if(parameter) {
             skin.borderColor = parameter;
         }
-        
+
         parameter = QuikklyGetStringOption(skinOptions, QUIKKLY_KEY_DATA_COLOR);
-        
+
         if(parameter) {
             skin.dataColors = @[ parameter ];
         }
-        
+
         parameter = QuikklyGetStringOption(skinOptions, QUIKKLY_KEY_MASK_COLOR);
-        
+
         if(parameter) {
             skin.maskColor = parameter;
         }
-        
+
         parameter = QuikklyGetStringOption(skinOptions, QUIKKLY_KEY_OVERLAY_COLOR);
-        
+
         if(parameter) {
             skin.overlayColor = parameter;
         }
-        
+
         parameter = QuikklyGetStringOption(skinOptions, QUIKKLY_KEY_IMAGE_FILE);
-        
+
         if(parameter) {
             skin.imageUri = parameter;
         }
     }
-    
+
     result = [[QKScannable alloc] initWithValue:((NSNumber *)value).unsignedLongLongValue
                                        template:(NSString *)template
                                            skin:skin].svgString;
-    
+    #endif
+
     if(result) {
         resolve(result);
     } else {
@@ -129,36 +136,38 @@ RCT_EXPORT_METHOD(scanForResult:(NSDictionary *)options
                   resolver:(RCTPromiseResolveBlock)resolve
                   rejecter:(RCTPromiseRejectBlock)reject) {
     QuikklyInitialize();
-    
+
+    #if !(TARGET_IPHONE_SIMULATOR)
     dispatch_async(dispatch_get_main_queue(), ^ {
         UIViewController *rootController = [UIApplication sharedApplication].delegate.window.rootViewController;
         QuikklyScanViewController *scanController;
         BOOL animated = YES;
-        
+
         if(!rootController) {
             reject(@"QuikklyNoContext",
                    @"Unable to get view controller",
                    [NSError errorWithDomain:QuikklyManagerErrorDomain code:-1 userInfo:nil]);
             return;
         }
-        
+
         scanController = [[QuikklyScanViewController alloc] initWithResolver:resolve rejecter:reject];
-        
+
         if(options) {
             NSObject *anim = [options objectForKey:@"animated"];
             NSObject *title = [options objectForKey:@"title"];
-            
+
             if([anim isKindOfClass:[NSNumber class]]) {
                 animated = ((NSNumber *)anim).boolValue;
             }
-            
+
             if([title isKindOfClass:[NSString class]]) {
                 scanController.title = (NSString *)title;
             }
         }
-        
+
         [rootController presentViewController:scanController animated:animated completion:nil];
     });
+    #endif
 }
 
 @end
