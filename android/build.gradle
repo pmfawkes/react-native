@@ -43,8 +43,15 @@ android {
 repositories {
     google()
     jcenter()
-    maven { url 'https://quikklysdks.bintray.com/quikkly-android-sdk' }
-    maven { url "$rootDir/../node_modules/react-native/android" }
+    maven {
+        name = "GithubPackagesQuikkly"
+        url "https://maven.pkg.github.com/quikkly/quikkly-android-sdk"
+        credentials {
+            // property() searches from ~/.gradle/gradle.properties and many .properties files in the project.
+            username = String.valueOf(System.getenv('GITHUB_USER_NAME'))
+            password = String.valueOf(System.getenv('GH_PACKAGE_PAT'))
+        }
+    }
 }
 
 dependencies {
